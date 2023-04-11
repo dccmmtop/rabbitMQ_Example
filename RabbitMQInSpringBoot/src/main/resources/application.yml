@@ -1,0 +1,8 @@
+spring:
+  rabbitmq:
+    host: 127.0.0.1
+    port: 5672
+    username: dc
+    password: Aa111111
+    virtual-host: /dc0407
+    publisher-confirms: true
