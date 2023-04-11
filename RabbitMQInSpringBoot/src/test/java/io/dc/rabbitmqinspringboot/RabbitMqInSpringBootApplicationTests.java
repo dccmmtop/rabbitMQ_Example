@@ -70,10 +70,7 @@ public class RabbitMqInSpringBootApplicationTests {
                System.out.println("replyText: " + replyText);
                System.out.println("exchange: " + exchange);
                System.out.println("routingKey: " + routingKey);
-
            }
-
-
        });
         // 正常
         rabbitTemplate.convertAndSend(RabbitMQConfig.EXCHANGE_NAME,"boot.dc","你好 rabbitMQ");
