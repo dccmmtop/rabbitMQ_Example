@@ -5,4 +5,12 @@ spring:
     username: dc
     password: Aa111111
     virtual-host: /dc0407
+    # 让发布者可以收到消息是否投递成功的回调
+    # 默认是false
     publisher-confirms: true
+
+    # 消费者开启手动确认模式
+    listener:
+      simple:
+        acknowledge-mode: manual
+        prefetch: 1

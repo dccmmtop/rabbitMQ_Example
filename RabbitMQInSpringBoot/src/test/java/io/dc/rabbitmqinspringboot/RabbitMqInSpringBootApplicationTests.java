@@ -1,9 +1,11 @@
 package io.dc.rabbitmqinspringboot;
 
+import com.rabbitmq.client.AMQP;
 import io.dc.rabbitmqinspringboot.config.RabbitMQConfig;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.amqp.core.Message;
+import org.springframework.amqp.core.MessageProperties;
 import org.springframework.amqp.rabbit.connection.CorrelationData;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +24,22 @@ public class RabbitMqInSpringBootApplicationTests {
     @Test
     public void sendMsg() {
         rabbitTemplate.convertAndSend(RabbitMQConfig.EXCHANGE_NAME,"boot.dc","你好 rabbitMQ");
+    }
+    @Test
+    public void sendBatchMsg() {
+        for (int i = 0; i < 10; i++) {
+            rabbitTemplate.convertAndSend(RabbitMQConfig.EXCHANGE_NAME,"boot.dc","你好 rabbitMQ");
+        }
+    }
+
+    @Test
+    public void sendMsgWithTtl() {
+
+        MessageProperties properties1 = new MessageProperties();
+        properties1.setExpiration("6000");
+        Message message = new Message("你好".getBytes(),properties1);
+
+        rabbitTemplate.convertAndSend(RabbitMQConfig.EXCHANGE_NAME,"boot.dc",message);
     }
 
     @Test
@@ -81,6 +99,16 @@ public class RabbitMqInSpringBootApplicationTests {
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Test
+    public void sendDeadMsg() {
+
+        MessageProperties properties = new MessageProperties();
+        properties.setExpiration("6000");
+        Message message = new Message("你好,6秒后我将要从列中移除，并进入死信队列".getBytes(),properties);
+
+        rabbitTemplate.convertAndSend(RabbitMQConfig.EXCHANGE_NAME,"boot.hei",message);
     }
 
 }
